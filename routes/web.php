@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy');
     });
 
+    // Display
     Route::prefix('media-display')->name('media-display.')->group(function () {
         Route::get('/', [MediaDisplayController::class, 'index'])
             ->name('index');
