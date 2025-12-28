@@ -15,6 +15,7 @@ class Media extends Model
     protected $fillable = [
         'judul',
         'file_path',
+        'thumb_path',
         'tipe',
         'aktif',
         'urutan',

@@ -1,19 +1,20 @@
 <x-app-layout>
-
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    {{ __('Running Text') }}
+                    {{ __('Agenda') }}
                 </h2>
-                <p class="mt-1 text-sm text-gray-500">Ingat untuk aktifkan Running Text agar tampil!</p>
+                <p class="mt-1 text-sm text-gray-500">
+                    Hanya agenda yg sedang berlangsung atau akan datang yg tampil
+                </p>
             </div>
-            <a href="{{ route('running-texts.create') }}"
+            <a href="{{ route('agenda.create') }}"
                 class="flex items-center px-3 py-2 text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                Tambah Text
+                Tambah Agenda
             </a>
         </div>
     </x-slot>
@@ -22,59 +23,66 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
-                    @if ($runningTexts->isEmpty())
+                    @if ($agenda->isEmpty())
                         <div class="py-8 text-center">
-                            <p class="text-gray-500">Belum ada data teks</p>
+                            <p class="text-gray-500">Belum ada agenda.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto ">
-                            <table id="runningTextTable"
-                                class="min-w-full border border-gray-200 divide-y divide-gray-200 ">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium tracking-wider text-gray-500 uppercase">
-                                            No</th>
+                        <div class="overflow-x-auto">
+                            <table id="agendaTable" class="min-w-full border border-gray-200 divide-y divide-gray-200 ">
+                                <thead>
+                                    <tr class="bg-gray-50">
                                         <th
                                             class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Isi Teks</th>
+                                            No
+                                        </th>
                                         <th
                                             class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Status</th>
+                                            Judul
+                                        </th>
                                         <th
                                             class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Aksi</th>
+                                            Deskripsi
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                            Tanggal Mulai
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                            Tanggal Selesai
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                            Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach ($runningTexts as $item)
+                                    @foreach ($agenda as $item)
                                         <tr class="transition-colors duration-150 hover:bg-gray-50">
-                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-
+                                            <td class="px-6 py-4 text-sm whitespace-nowrap"></td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $item->judul }}</div>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <div class="max-w-md text-sm text-gray-900 line-clamp-2">
-                                                    {{ $item->isi_teks }}
+                                                <div class="text-sm text-gray-900 line-clamp-3">
+                                                    {{ $item->deskripsi }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">
+                                                    {{ \Carbon\Carbon::parse($item->tgl_mulai)->translatedFormat('d F Y') }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @if ($item->aktif)
-                                                    <span
-                                                        class="inline-flex px-3 py-1 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                                                        Aktif
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="inline-flex px-3 py-1 text-xs font-semibold leading-5 text-gray-800 bg-gray-100 rounded-full">
-                                                        Nonaktif
-                                                    </span>
-                                                @endif
+                                                <div class="text-sm text-gray-900">
+                                                    {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d F Y') }}
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center space-x-1">
                                                     <!-- Edit Button -->
-                                                    <a href="{{ route('running-texts.edit', $item->id_running_text) }}"
+                                                    <a href="{{ route('agenda.edit', $item->id_agenda) }}"
                                                         class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 transition-colors duration-200 bg-blue-100 rounded hover:bg-blue-200"
                                                         title="Edit">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
@@ -88,8 +96,7 @@
                                                     </a>
 
                                                     <!-- Delete Button -->
-                                                    <form
-                                                        action="{{ route('running-texts.destroy', $item->id_running_text) }}"
+                                                    <form action="{{ route('agenda.destroy', $item->id_agenda) }}"
                                                         method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
@@ -115,16 +122,16 @@
                             </table>
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>
     </div>
+
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
 
-                const table = $('#runningTextTable').DataTable({
+                const table = $('#agendaTable').DataTable({
                     pageLength: 10,
                     lengthMenu: [5, 10, 25, 50],
 
@@ -150,9 +157,12 @@
                             orderable: false,
                             searchable: false,
                             type: 'string',
-                        }, // No
+                        }, // No,
                         {
-                            targets: 3,
+                            targets: [3, 4, 5],
+                            searchable: false
+                        }, {
+                            targets: 5,
                             orderable: false
                         } // Aksi
                     ]
@@ -163,6 +173,7 @@
                     table
                         .cells(null, 0, {
                             search: 'applied',
+                            order: 'applied'
                         })
                         .every(function() {
                             this.data(i++);

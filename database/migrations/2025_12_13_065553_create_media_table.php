@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_media');
             $table->string('judul');
             $table->string('file_path');
+            $table->string('thumb_path')->nullable();
             $table->enum('tipe', ['gambar', 'video']);
             $table->boolean('aktif')->default(false);
             $table->integer('urutan')->default(0);
