@@ -1,20 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Media') }}
-            </h2>
-        </div>
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Edit Media') }}
+        </h2>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <!-- Alert Messages -->
             @if ($errors->any())
-                <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+                <div class="p-4 mb-6 border-l-4 border-red-500 rounded-r-lg bg-red-50">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                                     clip-rule="evenodd" />
@@ -25,7 +23,7 @@
                                 Terdapat {{ $errors->count() }} kesalahan dalam input
                             </h3>
                             <div class="mt-2 text-sm text-red-700">
-                                <ul class="list-disc pl-5 space-y-1">
+                                <ul class="pl-5 space-y-1 list-disc">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
@@ -37,10 +35,10 @@
             @endif
 
             @if (session('success'))
-                <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
+                <div class="p-4 mb-6 border-l-4 border-green-500 rounded-r-lg bg-green-50">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
@@ -53,20 +51,20 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <!-- Current Media Preview -->
                     <div class="mb-8">
-                        <h4 class="text-sm font-medium text-gray-500 mb-3">Media Saat Ini</h4>
-                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h4 class="mb-3 text-sm font-medium text-gray-500">Media Saat Ini</h4>
+                        <div class="flex items-center p-4 space-x-4 border border-gray-200 rounded-lg bg-gray-50">
                             @if ($media->tipe == 'gambar')
                                 <div
-                                    class="w-20 h-20 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex-shrink-0">
+                                    class="flex-shrink-0 w-20 h-20 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg">
                                     @if (file_exists(public_path('storage/' . $media->file_path)))
                                         <img src="{{ Storage::url($media->file_path) }}" alt="{{ $media->judul }}"
-                                            class="w-full h-full object-cover">
+                                            class="object-cover w-full h-full">
                                     @else
-                                        <div class="w-full h-full flex items-center justify-center">
+                                        <div class="flex items-center justify-center w-full h-full">
                                             <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +76,7 @@
                                 </div>
                             @else
                                 <div
-                                    class="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-300 bg-gray-800 flex-shrink-0">
+                                    class="relative flex-shrink-0 w-20 h-20 overflow-hidden bg-gray-800 border border-gray-300 rounded-lg">
                                     <div class="absolute inset-0 flex items-center justify-center">
                                         <svg class="w-8 h-8 text-white/80" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -87,7 +85,7 @@
                                         </svg>
                                     </div>
                                     <div
-                                        class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs py-1 px-2 text-center">
+                                        class="absolute bottom-0 left-0 right-0 px-2 py-1 text-xs text-center text-white bg-black/60">
                                         Video
                                     </div>
                                 </div>
@@ -126,17 +124,17 @@
                         <div class="space-y-6">
                             <!-- Judul Field -->
                             <div>
-                                <label for="judul" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="judul" class="block mb-2 text-sm font-medium text-gray-700">
                                     Nama Media <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="judul" id="judul"
                                         value="{{ old('judul', $media->judul) }}" required maxlength="255"
-                                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
+                                        class="block w-full px-4 py-3 placeholder-gray-400 transition duration-150 ease-in-out border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Contoh: Selamat Datang di UHN Gusti Bagus Sugriwa">
 
-                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -145,7 +143,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-2 flex justify-between items-center">
+                                <div class="flex items-center justify-between mt-2">
                                     <div>
                                         @error('judul')
                                             <p class="text-sm text-red-600">{{ $message }}</p>
@@ -154,31 +152,16 @@
                                 </div>
                             </div>
 
-                            <!-- Action Buttons -->
-                            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                                <div>
-                                    <a href="{{ url()->previous() }}"
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                        Batal
-                                    </a>
-                                </div>
-
-                                <div class="flex space-x-3">
-                                    <button type="submit" id="submitBtn"
-                                        class="inline-flex items-center px-6 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Simpan Perubahan
-                                    </button>
-                                </div>
+                            <!-- Button Group -->
+                            <div class="flex justify-end pt-4 space-x-4 border-t border-gray-200">
+                                <a href="{{ route('running-texts.index') }}"
+                                    class="px-6 py-2 text-gray-700 transition duration-200 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    Batal
+                                </a>
+                                <button type="submit"
+                                    class="px-6 py-2 text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700">
+                                    <i class="mr-2 fas fa-save"></i>Simpan
+                                </button>
                             </div>
                         </div>
                     </form>

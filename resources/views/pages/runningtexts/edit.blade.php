@@ -1,31 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Running Text') }}
-            </h2>
-            <a href="{{ route('running-texts.index') }}"
-                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
-                ← Kembali
-            </a>
-        </div>
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Edit Running Text') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <form method="POST" action="{{ route('running-texts.update', $runningText->id_running_text) }}">
                         @csrf
                         @method('PUT')
 
                         <div class="mb-6">
-                            <label for="isi_teks" class="block text-sm font-medium text-gray-700 mb-2">
-                                Isi Running Text *
+                            <label for="isi_teks" class="block mb-2 text-sm font-medium text-gray-700">
+                                Isi Running Text <span class="text-red-500">*</span>
                             </label>
-                            <textarea id="isi_teks" name="isi_teks" rows="3" required
+                            <input id="isi_teks" name="isi_teks" value="{{ old('isi_teks', $runningText->isi_teks) }}"
+                                required
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004680] focus:border-[#004680]"
-                                placeholder="Masukkan teks yang akan ditampilkan di running text">{{ old('isi_teks', $runningText->isi_teks) }}</textarea>
+                                placeholder="Masukkan teks yang akan ditampilkan di running text"></input>
                             @error('isi_teks')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -43,13 +38,15 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center justify-end space-x-4">
-                            <a href="{{ route('running-texts.index') }}" class="text-gray-600 hover:text-gray-900">
+                        <!-- Button Group -->
+                        <div class="flex justify-end pt-4 space-x-4 border-t border-gray-200">
+                            <a href="{{ route('running-texts.index') }}"
+                                class="px-6 py-2 text-gray-700 transition duration-200 border border-gray-300 rounded-lg hover:bg-gray-50">
                                 Batal
                             </a>
                             <button type="submit"
-                                class="bg-[#004680] hover:bg-[#003560] text-white font-bold py-2 px-6 rounded">
-                                Update Running Text
+                                class="px-6 py-2 text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700">
+                                <i class="mr-2 fas fa-save"></i>Simpan
                             </button>
                         </div>
                     </form>

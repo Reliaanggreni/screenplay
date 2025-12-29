@@ -1,2 +1,1 @@
-<img src="{{ asset('img/IHDN-Denpasar-Logo-300x300.png') }}" alt="Logo IHDN Denpasar" class="h-16 w-auto object-contain"
-    {{ $attributes }}>
+<img src="{{ asset('img/uhnicon.png') }}" alt="Logo UHN Sugriwa" {{ $attributes->merge(['class' => 'object-contain']) }}>
