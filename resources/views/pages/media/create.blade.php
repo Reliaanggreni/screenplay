@@ -135,7 +135,7 @@
 
             if (!file) return;
 
-            const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+            const MAX_SIZE = 150 * 1024 * 1024; // 150MB
 
             const previewContainer = document.getElementById('preview-container');
             const previewImage = document.getElementById('preview-image');
@@ -154,7 +154,7 @@
 
             // Validasi ukuran
             if (file.size > MAX_SIZE) {
-                alert('Ukuran file maksimal 50MB');
+                alert('Ukuran file maksimal 150MB');
                 clearFile();
                 return;
             }

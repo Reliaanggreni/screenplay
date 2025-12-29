@@ -52,7 +52,7 @@ class MediaController extends Controller
                 $request->tipe === 'gambar'
                     ? 'mimes:jpg,jpeg,png,webp'
                     : 'mimes:mp4',
-                'max:51200', // ✅ 50MB
+                'max:153600',
             ],
             'durasi' => 'nullable|integer|min:3|max:60',
             'urutan' => 'nullable|integer|min:1',
