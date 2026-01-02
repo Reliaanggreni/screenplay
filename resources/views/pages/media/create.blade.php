@@ -56,14 +56,14 @@
                                         <i class="mb-4 text-4xl text-gray-400 fas fa-cloud-upload-alt"></i>
                                         <p class="text-gray-600">Klik untuk upload file</p>
                                         <p class="mt-2 text-sm text-gray-400">
-                                            Maksimal 50MB. Format: JPG, PNG, WEBP, MP4
+                                            Maksimal 30MB. Format: JPG, PNG, WEBP, MP4
                                         </p>
                                     </div>
                                 </div>
                                 <p class="mt-2 text-xs text-gray-500">
                                     Disarankan:
                                     <span class="font-medium">Gambar</span> resolusi HD (min. 1280×720),
-                                    format JPG / WEBP.
+                                    format JPG / WEBP / PNG.
                                     <span class="font-medium">Video</span> MP4 , resolusi 1080p,
                                     durasi singkat agar tampil lancar.
                                 </p>
@@ -135,7 +135,7 @@
 
             if (!file) return;
 
-            const MAX_SIZE = 150 * 1024 * 1024; // 150MB
+            const MAX_SIZE = 30 * 1024 * 1024; // 30MB
 
             const previewContainer = document.getElementById('preview-container');
             const previewImage = document.getElementById('preview-image');
