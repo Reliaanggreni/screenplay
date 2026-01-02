@@ -107,4 +107,91 @@ class MediaController extends Controller
         return redirect()->route('media.index')
             ->with('success', 'Media berhasil ditambahkan.');
     }
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Media $media)
+    {
+        return view('pages.media.show', compact('media'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Media $media)
+    {
+        return view('pages.media.edit', compact('media'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Media $media)
+    {
+        $validated = $request->validate([
+            'judul' => 'required|string|max:255',
+        ]);
+
+        $media->update([
+            'judul' => $validated['judul'],
+        ]);
+
+        return redirect()->route('media.index')
+            ->with('success', 'Judul media berhasil diperbarui.');
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Media $media)
+    {
+        // Hapus file dari storage
+        if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+            Storage::disk('public')->delete($media->file_path);
+        }
+
+        $media->delete();
+
+        return redirect()->route('media.index')
+            ->with('success', 'Media berhasil dihapus.');
+    }
+
+    /**
+     * Get file extension from mime type
+     */
+
+    // toggle tampil / tidak
+    public function toggle(Request $request)
+    {
+        $media = Media::findOrFail($request->id);
+
+        if ($media->aktif != $request->aktif) {
+            $media->aktif = $request->aktif;
+            $media->save();
+        }
+        Cache::increment('display_version');
+        return response()->json(['success' => true]);
+    }
+
+    // update urutan slideshow
+    public function updateUrutan(Request $request)
+    {
+        $media = Media::findOrFail($request->id);
+        $media->urutan = $request->urutan;
+        $media->save();
+        Cache::increment('display_version');
+        return response()->json(['success' => true]);
+    }
+
+    public function updateDurasi(Request $request)
+    {
+        $media = Media::findOrFail($request->id);
+        $media->durasi = $request->durasi;
+        $media->save();
+        Cache::increment('display_version');
+        return response()->json(['success' => true]);
+    }
 }
