@@ -52,129 +52,59 @@ class MediaController extends Controller
                 $request->tipe === 'gambar'
                     ? 'mimes:jpg,jpeg,png,webp'
                     : 'mimes:mp4',
-                'max:153600',
+                'max:30720', // max 30MB
             ],
             'durasi' => 'nullable|integer|min:3|max:60',
             'urutan' => 'nullable|integer|min:1',
         ]);
 
-        if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $uuid = Str::uuid()->toString();
 
-            $file = $request->file('file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        if ($validated['tipe'] === 'gambar') {
 
-            $originalPath = $file->storeAs('media', $filename, 'public');
-            $validated['file_path'] = $originalPath;
+            $manager = new ImageManager(new Driver());
 
-            if ($validated['tipe'] === 'gambar') {
+            $filePath = "media/$uuid.webp";
 
-                $thumbPath = 'media/thumb/' . pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+            $image = $manager->read($file)
+                ->resize(1920, 1080)
+                ->toWebp(80);
 
-                $manager = new ImageManager(new Driver());
+            Storage::disk('public')->put($filePath, (string) $image);
+            $validated['file_path'] = $filePath;
 
-                $image = $manager->read($file)
-                    ->cover(320, 180)
-                    ->toWebp(75);
+            // THUMB (admin)
+            $thumbPath = "media/thumb/$uuid.webp";
 
-                Storage::disk('public')->put($thumbPath, (string) $image);
+            $thumb = $manager->read($file)
+                ->cover(320, 180)
+                ->toWebp(75);
 
-                $validated['thumb_path'] = $thumbPath;
-            }
+            Storage::disk('public')->put($thumbPath, (string) $thumb);
+            $validated['thumb_path'] = $thumbPath;
         }
 
+        /**
+         * =========================
+         * VIDEO
+         * =========================
+         */
+        if ($validated['tipe'] === 'video') {
+
+            $ext = $file->getClientOriginalExtension();
+            $filePath = "media/$uuid.$ext";
+
+            $file->storeAs('media', "$uuid.$ext", 'public');
+            $validated['file_path'] = $filePath;
+        }
 
         Media::create($validated);
 
+        // trigger reload display
         Cache::increment('display_version');
 
         return redirect()->route('media.index')
             ->with('success', 'Media berhasil ditambahkan.');
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Media $media)
-    {
-        return view('pages.media.show', compact('media'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Media $media)
-    {
-        return view('pages.media.edit', compact('media'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Media $media)
-    {
-        $validated = $request->validate([
-            'judul' => 'required|string|max:255',
-        ]);
-
-        $media->update([
-            'judul' => $validated['judul'],
-        ]);
-
-        return redirect()->route('media.index')
-            ->with('success', 'Judul media berhasil diperbarui.');
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Media $media)
-    {
-        // Hapus file dari storage
-        if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
-            Storage::disk('public')->delete($media->file_path);
-        }
-
-        $media->delete();
-
-        return redirect()->route('media.index')
-            ->with('success', 'Media berhasil dihapus.');
-    }
-
-    /**
-     * Get file extension from mime type
-     */
-
-    // toggle tampil / tidak
-    public function toggle(Request $request)
-    {
-        $media = Media::findOrFail($request->id);
-
-        if ($media->aktif != $request->aktif) {
-            $media->aktif = $request->aktif;
-            $media->save();
-        }
-        Cache::increment('display_version');
-        return response()->json(['success' => true]);
-    }
-
-    // update urutan slideshow
-    public function updateUrutan(Request $request)
-    {
-        $media = Media::findOrFail($request->id);
-        $media->urutan = $request->urutan;
-        $media->save();
-        Cache::increment('display_version');
-        return response()->json(['success' => true]);
-    }
-
-    public function updateDurasi(Request $request)
-    {
-        $media = Media::findOrFail($request->id);
-        $media->durasi = $request->durasi;
-        $media->save();
-        Cache::increment('display_version');
-        return response()->json(['success' => true]);
     }
 }

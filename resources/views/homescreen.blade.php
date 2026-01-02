@@ -94,11 +94,12 @@
                         data-durasi="{{ $item->tipe === 'gambar' ? $item->durasi ?? 5 : 0 }}">
 
                         @if ($item->tipe === 'video')
-                            <video class="object-cover w-full h-full " muted playsinline>
+                            <video class="object-cover w-full h-full " muted playsinline preload="metadata">
                                 <source src="{{ asset('storage/' . $item->file_path) }}">
                             </video>
                         @else
-                            <img src="{{ asset('storage/' . $item->file_path) }}" class="object-cover w-full h-full ">
+                            <img src="{{ asset('storage/' . $item->file_path) }}" loading="lazy"
+                                class="object-cover w-full h-full ">
                         @endif
                     </div>
                 @empty
